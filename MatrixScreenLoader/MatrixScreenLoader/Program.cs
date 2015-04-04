@@ -8,7 +8,7 @@ namespace MatrixScreenLoader
     public static class MatrixScreen
     {
 
-        public static void Run(int width, int height)
+        public static void Run(int width, int height, int timeout)
         {
             while (true)
             {
@@ -25,6 +25,7 @@ namespace MatrixScreenLoader
                         Console.Write((i < lineLength[j]) ? (char)(150 + random.Next(105)) : ' ');
                     }
                 }
+                System.Threading.Thread.Sleep(timeout);
             }
         }
 
@@ -34,7 +35,7 @@ namespace MatrixScreenLoader
     {
         static void Main(string[] args)
         {
-            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight);
+            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 100);
         }
     }
 }
