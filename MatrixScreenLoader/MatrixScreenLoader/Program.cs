@@ -25,7 +25,6 @@ namespace MatrixScreenLoader
                     {
                         text += ((i < lineLength[j]) ? random.Next(10).ToString() : " ");
                     }
-                    text += '\n';
                 }
                 Console.WriteLine(text);
                 System.Threading.Thread.Sleep(timeout);
@@ -38,7 +37,7 @@ namespace MatrixScreenLoader
     {
         static void Main(string[] args)
         {
-            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 300);
+            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 40);
         }
     }
 }
