@@ -5,21 +5,24 @@ using System.Text;
 namespace MatrixScreenLoader
 {
 
-    public class MatrixScreen
+    public static class MatrixScreen
     {
 
-        public void Run()
+        public static void Run(int width, int height)
         {
-
+            while (true)
+            {
+                
+            }
         }
 
     }
 
-    public class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-
+            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight);
         }
     }
 }
