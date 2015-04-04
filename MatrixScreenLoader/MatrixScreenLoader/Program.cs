@@ -12,7 +12,19 @@ namespace MatrixScreenLoader
         {
             while (true)
             {
-                
+                int[] lineLength = new int[width];
+                Random random = new Random();
+                for (int i = 0; i < width; i++)
+                {
+                    lineLength[i] = random.Next(height);
+                }
+                for (int i = 0; i < height; i++)
+                {
+                    for (int j = 0; j < width; j++)
+                    {
+                        Console.Write((i < lineLength[j]) ? (char)(150 + random.Next(105)) : ' ');
+                    }
+                }
             }
         }
 
