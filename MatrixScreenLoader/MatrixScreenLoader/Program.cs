@@ -4,10 +4,22 @@ using System.Text;
 
 namespace MatrixScreenLoader
 {
-    class Program
+
+    public class MatrixScreen
+    {
+
+        public void Run()
+        {
+
+        }
+
+    }
+
+    public class Program
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
