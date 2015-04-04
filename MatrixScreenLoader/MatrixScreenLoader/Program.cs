@@ -18,13 +18,16 @@ namespace MatrixScreenLoader
                 {
                     lineLength[i] = random.Next(height);
                 }
+                string text = null;
                 for (int i = 0; i < height; i++)
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        Console.Write((i < lineLength[j]) ? (char)(150 + random.Next(105)) : ' ');
+                        text += ((i < lineLength[j]) ? random.Next(10).ToString() : " ");
                     }
+                    text += '\n';
                 }
+                Console.WriteLine(text);
                 System.Threading.Thread.Sleep(timeout);
             }
         }
@@ -35,7 +38,7 @@ namespace MatrixScreenLoader
     {
         static void Main(string[] args)
         {
-            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 100);
+            MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 300);
         }
     }
 }
