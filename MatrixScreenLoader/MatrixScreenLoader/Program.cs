@@ -8,7 +8,7 @@ using System.Text;
  * Also current code unrecommended to view for person with weak psyhological health;
  * And remember: I did warn you;
  * Best wishes,
- *          Andrey Lysenkov (Allan Awake);
+ *          Allan Awake;
  */
 
 namespace MatrixScreenLoader
