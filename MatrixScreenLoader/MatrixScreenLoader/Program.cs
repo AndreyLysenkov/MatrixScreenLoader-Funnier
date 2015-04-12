@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 /*
- * Downthere complete sucks is happening;
+ * Downthere complete s*cks is happening;
  * Please, make sure, you took children away from the screen;
  * Also current code unrecommended to view for person with weak psyhological health;
  * And remember: I did warn you;
@@ -48,6 +48,7 @@ namespace MatrixScreenLoader
                     if ((parametr == null) || (parametr.Length == 0))
                         continue;
                     string[] split_parametr = parametr.Split(new char[] {value_separator}, 2);
+                    this.SetParametr(name: split_parametr[0], value: split_parametr[1]);
                 }
             }
 
@@ -96,6 +97,21 @@ namespace MatrixScreenLoader
                 /// Some bad thing downthere;
                 return int.TryParse(output_string, out output) ? output : default_value;
             }
+        
+            public bool GetBoolean(string name, bool default_value)
+            {
+                string output_string = Get(name, default_value.ToString());
+                bool output = false;
+                /// Some sh*t downthere;
+                return bool.TryParse(output_string, out output) ? output : default_value;
+            }
+
+
+            public void Apply()
+            {
+                Console.WindowHeight = this.GetInteger(Height, Console.WindowHeight);
+                Console.WindowWidth = this.GetInteger(Width, Console.WindowWidth);
+            }
         }
 
         public static void Run(Setting setting)
@@ -133,6 +149,9 @@ namespace MatrixScreenLoader
             MatrixScreen.Setting current_setting = new MatrixScreen.Setting();
             current_setting.Set(args);
             current_setting.DEBUG_ShowParametrs();
+            current_setting.Apply();
+            Console.WindowHeight = 56;
+            Console.WindowWidth = 166;
             ///MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 100);
             Console.ReadLine();
         }
