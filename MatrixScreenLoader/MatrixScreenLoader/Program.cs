@@ -123,7 +123,13 @@ namespace MatrixScreenLoader
             {
                 int[] lineLength = new int[width];
                 Random random = new Random();
+
+                ///Renew width and height;
+                width = Console.WindowWidth;
+                height = Console.WindowHeight;
+
                 Console.Clear();
+
                 for (int i = 0; i < width; i++)
                 {
                     lineLength[i] = 2 + random.Next(height);
