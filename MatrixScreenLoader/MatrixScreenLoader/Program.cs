@@ -21,9 +21,9 @@ namespace MatrixScreenLoader
         {
 
             const char value_separator = '=';
-            public const string Width = "width";
-            public const string Height = "height";
-            public const string Timeout = "timeout";
+            public const string Width = "/w";
+            public const string Height = "/h";
+            public const string Timeout = "/t";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
