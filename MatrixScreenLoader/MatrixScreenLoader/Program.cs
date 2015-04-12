@@ -25,15 +25,21 @@ namespace MatrixScreenLoader
             public const string Width = "/w";
             public const string Height = "/h";
             public const string Timeout = "/t";
+            public const string ClearScreen = "/c";
+            public const string UpdateOnResize = "/r";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
             /// And I couldn't remember them...
+            /// Anyway, it doesn't look good...
+            /// It doesn't look right eather...
             private string[][] _parametrs = 
                 {
                     new string[] {Width, "smth"}, 
                     new string[] {Height, "smth"}, 
-                    new string[] {Timeout, "100"}
+                    new string[] {Timeout, "100"},
+                    new string[] {ClearScreen, "true"},
+                    new string[] {UpdateOnResize, "true"}
                 };
 
             public Setting()
@@ -119,16 +125,22 @@ namespace MatrixScreenLoader
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
             int timeout = setting.GetInteger(Setting.Timeout, 100);
+            bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
+            bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             while (true)
             {
                 int[] lineLength = new int[width];
                 Random random = new Random();
 
                 ///Renew width and height;
-                width = Console.WindowWidth;
-                height = Console.WindowHeight;
+                if (isUpdateOnResize)
+                {
+                    width = Console.WindowWidth;
+                    height = Console.WindowHeight;
+                }
 
-                Console.Clear();
+                if (isClearScreen)
+                    Console.Clear();
 
                 for (int i = 0; i < width; i++)
                 {

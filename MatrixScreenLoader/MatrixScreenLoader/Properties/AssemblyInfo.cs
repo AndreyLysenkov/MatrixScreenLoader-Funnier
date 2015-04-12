@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MatrixScreenLoader")]
 [assembly: AssemblyDescription("Just show enterence into Matrix for fun")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Allan corp.")]
+[assembly: AssemblyCompany("Allan Awake corp.")]
 [assembly: AssemblyProduct("MatrixScreenLoader")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("Allan Awake ©  2015")]
+[assembly: AssemblyTrademark("Allan Awake corp.")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
