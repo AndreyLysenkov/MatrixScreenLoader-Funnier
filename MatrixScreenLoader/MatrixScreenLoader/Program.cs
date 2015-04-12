@@ -21,9 +21,18 @@ namespace MatrixScreenLoader
         {
 
             const char value_separator = '=';
-
+            const string Width = "width";
+            const string Height = "height";
+            const string Timeout = "timeout";
+            /// Yeah, I could use [,] instead of [][], but...
+            /// I had some reasons about that weird form...
+            /// And I couldn't remember them...
             private string[][] _parametrs = 
-                {new string[] {"width", "smth"}, {"height", "smth"}, {"timeout", "100"}};
+                {
+                    new string[] {"width", "smth"}, 
+                    new string[] {"height", "smth"}, 
+                    new string[] {"timeout", "100"}
+                };
 
             public Setting()
             {   }
@@ -50,27 +59,50 @@ namespace MatrixScreenLoader
                 }
             }
 
-            private bool SetParametr(string name, object value)
+            private int GetIndexByName(string name, int null_index = -1)
             {
                 bool isFounded = false;
+                int index = null_index;
                 for (int i = 0; (i < _parametrs.Length) && (!isFounded); i++)
                 {
-                    if (name.ToLower() == _parametrs[i, 0])
+                    if (name.ToLower() == _parametrs[i][0])
                     {
-                        _parametrs[i, 1] = value.ToString();
                         isFounded = true;
+                        index = null_index;
                     }
                 }
-                return isFounded;
+                return isFounded ? index : null_index;
+            }
+            
+            private bool SetParametr(string name, object value)
+            {
+                int index = GetIndexByName(name, -1);
+                if (index == -1)
+                    return false;
+                _parametrs[index][1] = value.ToString();
+                return true;
             }
         
+            public string Get(string name, string default_value)
+            {
+                int index = GetIndexByName(name, -1);
+                return index == -1 ? default_value : _parametrs[index][1];
+            }
+        
+            public int GetInteger(string name, int default_value)
+            {
+                string output_string = Get(name, default_value.ToString());
+                int output = 0;
+                /// Some bad thing downthere;
+                return int.TryParse(output_string, out output) ? output : default_value;
+            }
         }
 
-        public static void Run(int width, int height, int timeout)
+        public static void Run(Setting setting)
         {
             while (true)
             {
-                int[] lineLength = new int[width];
+                int[] lineLength = new int[setting.GetIntegerwidth];
                 Random random = new Random();
                 for (int i = 0; i < width; i++)
                 {
