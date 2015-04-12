@@ -27,6 +27,7 @@ namespace MatrixScreenLoader
             public const string Timeout = "/t";
             public const string ClearScreen = "/c";
             public const string UpdateOnResize = "/r";
+            public const string Range = "/d";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
@@ -37,9 +38,10 @@ namespace MatrixScreenLoader
                 {
                     new string[] {Width, "smth"}, 
                     new string[] {Height, "smth"}, 
-                    new string[] {Timeout, "100"},
+                    new string[] {Timeout, "50"},
                     new string[] {ClearScreen, "true"},
-                    new string[] {UpdateOnResize, "true"}
+                    new string[] {UpdateOnResize, "true"},
+                    new string[] {Range, "2"}
                 };
 
             public Setting()
@@ -127,6 +129,7 @@ namespace MatrixScreenLoader
             int timeout = setting.GetInteger(Setting.Timeout, 100);
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
+            int range = setting.GetInteger(Setting.Range, 2);
             while (true)
             {
                 ///Renew width and height;
@@ -151,7 +154,7 @@ namespace MatrixScreenLoader
                 {
                     for (int j = 0; j < width; j++)
                     {
-                        text += ((i <= lineLength[j]) ? random.Next(10).ToString() : " ");
+                        text += ((i <= lineLength[j]) ? random.Next(range).ToString() : " ");
                     }
                 }
                 Console.WriteLine(text);
