@@ -17,6 +17,7 @@ namespace MatrixScreenLoader
     public static class MatrixScreen
     {
 
+        /// Note, what height and width set not in pixels... in smth else... he-he
         public class Setting
         {
 
@@ -106,7 +107,6 @@ namespace MatrixScreenLoader
                 return bool.TryParse(output_string, out output) ? output : default_value;
             }
 
-
             public void Apply()
             {
                 Console.WindowHeight = this.GetInteger(Height, Console.WindowHeight);
@@ -144,16 +144,18 @@ namespace MatrixScreenLoader
 
     public static class Program
     {
+
         static void Main(string[] args)
         {
             MatrixScreen.Setting current_setting = new MatrixScreen.Setting();
             current_setting.Set(args);
-            current_setting.DEBUG_ShowParametrs();
+            //current_setting.DEBUG_ShowParametrs();
+            //Console.ReadLine();
             current_setting.Apply();
-            Console.WindowHeight = 56;
-            Console.WindowWidth = 166;
-            ///MatrixScreen.Run(Console.WindowWidth, Console.WindowHeight, 100);
+            MatrixScreen.Run(current_setting);
             Console.ReadLine();
         }
+    
     }
+
 }
