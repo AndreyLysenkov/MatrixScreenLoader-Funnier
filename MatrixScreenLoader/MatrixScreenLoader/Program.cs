@@ -21,17 +21,18 @@ namespace MatrixScreenLoader
         {
 
             const char value_separator = '=';
-            const string Width = "width";
-            const string Height = "height";
-            const string Timeout = "timeout";
+            public const string Width = "width";
+            public const string Height = "height";
+            public const string Timeout = "timeout";
+
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
             /// And I couldn't remember them...
             private string[][] _parametrs = 
                 {
-                    new string[] {"width", "smth"}, 
-                    new string[] {"height", "smth"}, 
-                    new string[] {"timeout", "100"}
+                    new string[] {Width, "smth"}, 
+                    new string[] {Height, "smth"}, 
+                    new string[] {Timeout, "100"}
                 };
 
             public Setting()
@@ -100,9 +101,12 @@ namespace MatrixScreenLoader
 
         public static void Run(Setting setting)
         {
+            int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
+            int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
+            int timeout = setting.GetInteger(Setting.Timeout, 100);
             while (true)
             {
-                int[] lineLength = new int[setting.GetIntegerwidth];
+                int[] lineLength = new int[width];
                 Random random = new Random();
                 for (int i = 0; i < width; i++)
                 {
