@@ -47,8 +47,7 @@ namespace MatrixScreenLoader
                     string parametr = args[i];
                     if ((parametr == null) || (parametr.Length == 0))
                         continue;
-                    string[] split_parametrs = parametr.Split(new char[] {value_separator}, 2);
-                    this.SetParametr(name: split_parametrs[0], value: split_parametrs[1]);
+                    string[] split_parametr = parametr.Split(new char[] {value_separator}, 2);
                 }
             }
 
@@ -66,10 +65,10 @@ namespace MatrixScreenLoader
                 int index = null_index;
                 for (int i = 0; (i < _parametrs.Length) && (!isFounded); i++)
                 {
-                    if (name.ToLower() == _parametrs[i][0])
+                    if (name == _parametrs[i][0])
                     {
                         isFounded = true;
-                        index = null_index;
+                        index = i;
                     }
                 }
                 return isFounded ? index : null_index;
