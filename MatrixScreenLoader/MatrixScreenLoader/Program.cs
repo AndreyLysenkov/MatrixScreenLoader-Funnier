@@ -129,15 +129,15 @@ namespace MatrixScreenLoader
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             while (true)
             {
-                int[] lineLength = new int[width];
-                Random random = new Random();
-
                 ///Renew width and height;
                 if (isUpdateOnResize)
                 {
                     width = Console.WindowWidth;
                     height = Console.WindowHeight;
                 }
+
+                int[] lineLength = new int[width];
+                Random random = new Random();
 
                 if (isClearScreen)
                     Console.Clear();
