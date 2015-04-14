@@ -191,6 +191,7 @@ namespace MatrixScreenLoader
             int height;
             List<Run_2_Line> lines;
 
+
             public Run_2_Matrix(int width, int height)
             {
                 this.width = width;
@@ -199,17 +200,41 @@ namespace MatrixScreenLoader
                 lines = new List<Run_2_Line> { };
             }
 
+            private bool CheckColumnIndex(int i)
+            {
+                return (i >= 0) && (i <= MaxWidth);
+            }
 
+            private bool CheckRowIndex(int i)
+            {
+                return (i >= 0) && (i <= MaxHeight);
+            }
+
+            private bool CheckIndexes(int row, int column)
+            {
+                return CheckColumnIndex(column) && CheckRowIndex(row);
+            }
+
+            public char this[int index1, int index2]
+            {
+                get
+                {
+                    return CheckIndexes(index1, index2) ? ' ' : matrix[index1, index2];
+                }
+
+                set
+                {
+                    if (CheckIndexes(index1, index2))
+                        matrix[index1, index2] = value;
+                }
+            }
 
             public void AddNewLine(int column, int start, int length, string random_line)
             {
-                Run_2_Line line = new Run_2_Line(column, start, length);
+                Run_2_Line line = new Run_2_Line(column, start, length, random_line);
                 for (int i = 0, j = line.start; (j <= line.end); i++, j++)
                 {
-                    if (true)
-                    {
-                        matrix[j, line.column] = random_line[i];
-                    }
+                    this[j, line.column] = this.random_line[i];
                 }
                 this.lines.Add(line);
             }
@@ -222,17 +247,21 @@ namespace MatrixScreenLoader
             public int column;
             public int start;
             public int end;
+            public string random_line;
+            public int random_line_position;
 
             public int Length
             {
                 get { return end - start + 1; }
             }
 
-            public Run_2_Line(int column, int start, int length)
+            public Run_2_Line(int column, int start, int length, string random_line)
             {
                 this.column = column;
                 this.start = start;
                 this.end = start + length - 1;
+                this.random_line = random_line;
+                this.random_line_position = 0;
             }
         
             public void ShiftDown(int shift_length)
@@ -240,7 +269,19 @@ namespace MatrixScreenLoader
                 start -= shift_length;
                 end -= shift_length;
             }
-        
+            
+            private bool CheckLinePosition()
+            {
+                return this.random_line_position < random_line.Length;
+            }
+
+            public char GetSymbol()
+            {
+                if (!CheckLinePosition())
+                    random_line_position = 0;
+                return random_line[random_line_position++]; ///Not sure;
+            }
+
         }
 
         private static void Run_2_Print(char[,] matrix, int width, int height)
