@@ -60,7 +60,7 @@ namespace MatrixScreenLoader
                 };
 
             public Setting()
-            {   }
+            { }
 
             public void Set(string[] args)
             {
@@ -71,7 +71,7 @@ namespace MatrixScreenLoader
                     string parametr = args[i];
                     if ((parametr == null) || (parametr.Length == 0))
                         continue;
-                    string[] split_parametr = parametr.Split(new char[] {value_separator}, 2);
+                    string[] split_parametr = parametr.Split(new char[] { value_separator }, 2);
                     this.SetParametr(name: split_parametr[0], value: split_parametr[1]);
                 }
             }
@@ -98,7 +98,7 @@ namespace MatrixScreenLoader
                 }
                 return isFounded ? index : null_index;
             }
-            
+
             private bool SetParametr(string name, object value)
             {
                 int index = GetIndexByName(name, -1);
@@ -107,13 +107,13 @@ namespace MatrixScreenLoader
                 _parametrs[index][1] = value.ToString();
                 return true;
             }
-        
+
             public string Get(string name, string default_value)
             {
                 int index = GetIndexByName(name, -1);
                 return index == -1 ? default_value : _parametrs[index][1];
             }
-        
+
             public int GetInteger(string name, int default_value)
             {
                 string output_string = Get(name, default_value.ToString());
@@ -121,7 +121,7 @@ namespace MatrixScreenLoader
                 /// Some bad thing downthere;
                 return int.TryParse(output_string, out output) ? output : default_value;
             }
-        
+
             public bool GetBoolean(string name, bool default_value)
             {
                 string output_string = Get(name, default_value.ToString());
@@ -147,7 +147,7 @@ namespace MatrixScreenLoader
                         break;
                 }
             }
-        
+
         }
 
         private static void Run_1(Setting setting)
@@ -266,7 +266,7 @@ namespace MatrixScreenLoader
 
             public void ShiftLines()
             {
-                for (int i = 0; i < lines.Count; i++ )
+                for (int i = 0; i < lines.Count; i++)
                 {
                     Run_2_Line line = lines[i];
                     int index1 = line.start;
@@ -301,13 +301,13 @@ namespace MatrixScreenLoader
                 this.random_line = random_line;
                 this.random_line_position = 0;
             }
-        
+
             public void ShiftDown(int shift_length)
             {
                 start -= shift_length;
                 end -= shift_length;
             }
-            
+
             private bool CheckLinePosition()
             {
                 return random_line_position < random_line.Length;
@@ -319,7 +319,7 @@ namespace MatrixScreenLoader
                     this.random_line_position = 0;
                 return this.random_line[this.random_line_position++]; ///Not sure;
             }
-        
+
             private bool IsBelong(int digit, int diapason_start, int diapason_end)
             {
                 return (digit >= diapason_start) && (digit <= diapason_end);
@@ -335,9 +335,9 @@ namespace MatrixScreenLoader
         private static void Run_2_Print(char[,] matrix, int width, int height)
         {
             string text = "";
-            for(int i = 0; i < height; i++)
+            for (int i = 0; i < height; i++)
             {
-                for(int j=0; j < width; j++)
+                for (int j = 0; j < width; j++)
                 {
                     text += matrix[i, j];
                 }
@@ -347,6 +347,12 @@ namespace MatrixScreenLoader
 
         private static void Run_2(Setting setting)
         {
+
+            //public const string Run2_FileOfLines = "/linesFile";
+            //public const string Run2_MinLinesLength = "/minLinesLength";
+            //public const string Run2_MaxLinesLength = "/maxLinesLength";
+            //public const string Run2_LinesCount = "/linesCount";
+            //public const string Run2_GenerateTimeout = "/lineTimeout";
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
             int timeout = setting.GetInteger(Setting.Timeout, 100);
@@ -354,7 +360,15 @@ namespace MatrixScreenLoader
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int range = setting.GetInteger(Setting.Range, 2);
             string[] lines = new string[] { };
-            while (true)
+            ///Forming a lines array;
+            int linesCount = setting.GetInteger(Setting.Run2_LinesCount, 2713);
+            
+            for (int i = 0; i < linesCount; i++)
+            {
+
+            }
+
+            for (int linesCounter = 0; true; linesCounter = (linesCounter < lines.Length) ? linesCounter + 1 : 0)
             {
 
                 if (isClearScreen)
