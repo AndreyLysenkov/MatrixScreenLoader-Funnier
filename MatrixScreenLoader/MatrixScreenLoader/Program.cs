@@ -14,8 +14,12 @@ using System.Text;
 namespace MatrixScreenLoader
 {
 
-    public static class MatrixScreen
+    public class MatrixScreen
     {
+
+        public delegate void Runner(Setting setting);
+
+        public Runner Run;
 
         /// Note, what height and width set not in pixels... in smth else... he-he
         public class Setting
@@ -28,6 +32,7 @@ namespace MatrixScreenLoader
             public const string ClearScreen = "/c";
             public const string UpdateOnResize = "/r";
             public const string Range = "/d";
+            public const string Run = "/run";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
@@ -41,7 +46,8 @@ namespace MatrixScreenLoader
                     new string[] {Timeout, "50"},
                     new string[] {ClearScreen, "true"},
                     new string[] {UpdateOnResize, "true"},
-                    new string[] {Range, "2"}
+                    new string[] {Range, "2"},
+                    new string[] {Run, "0"}
                 };
 
             public Setting()
@@ -115,14 +121,26 @@ namespace MatrixScreenLoader
                 return bool.TryParse(output_string, out output) ? output : default_value;
             }
 
-            public void Apply()
+            public void Apply(MatrixScreen matrix)
             {
                 Console.WindowHeight = this.GetInteger(Height, Console.WindowHeight);
                 Console.WindowWidth = this.GetInteger(Width, Console.WindowWidth);
+                switch (GetInteger(Run, 0))
+                {
+                    case 1:
+                        matrix.Run = Run_1;
+                        break;
+                    case 2:
+                        matrix.Run = Run_2;
+                        break;
+                    default:
+                        matrix.Run = Run_1;
+                        break;
+                }
             }
         }
 
-        public static void Run(Setting setting)
+        private static void Run_1(Setting setting)
         {
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
@@ -162,6 +180,11 @@ namespace MatrixScreenLoader
             }
         }
 
+        private static void Run_2(Setting setting)
+        {
+
+        }
+
     }
 
     public static class Program
@@ -169,12 +192,13 @@ namespace MatrixScreenLoader
 
         static void Main(string[] args)
         {
+            MatrixScreen matrix = new MatrixScreen();
             MatrixScreen.Setting current_setting = new MatrixScreen.Setting();
             current_setting.Set(args);
             //current_setting.DEBUG_ShowParametrs();
             //Console.ReadLine();
-            current_setting.Apply();
-            MatrixScreen.Run(current_setting);
+            current_setting.Apply(matrix);
+            matrix.Run(current_setting);
             Console.ReadLine();
         }
     
