@@ -138,6 +138,7 @@ namespace MatrixScreenLoader
                         break;
                 }
             }
+        
         }
 
         private static void Run_1(Setting setting)
@@ -211,7 +212,7 @@ namespace MatrixScreenLoader
                 {
                     if(true)
                     {
-                        matrix[Column, i] = random_line[i];
+                        matrix[j, Column] = random_line[i];
                     }
                 }
             }
@@ -221,9 +222,9 @@ namespace MatrixScreenLoader
         private static void Run_2_Print(char[,] matrix, int width, int height)
         {
             string text = "";
-            for(int i = 0; i < width; i++)
+            for(int i = 0; i < height; i++)
             {
-                for(int j=0; j < height; j++)
+                for(int j=0; j < width; j++)
                 {
                     text += matrix[i, j];
                 }
