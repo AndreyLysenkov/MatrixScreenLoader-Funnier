@@ -26,13 +26,18 @@ namespace MatrixScreenLoader
         {
 
             const char value_separator = '=';
-            public const string Width = "/w";
-            public const string Height = "/h";
-            public const string Timeout = "/t";
-            public const string ClearScreen = "/c";
-            public const string UpdateOnResize = "/r";
-            public const string Range = "/d";
+            public const string Width = "/width";
+            public const string Height = "/height";
+            public const string Timeout = "/timeout";
+            public const string ClearScreen = "/clear";
+            public const string UpdateOnResize = "/resize";
+            public const string Range = "/range";
             public const string Run = "/run";
+            public const string Run2_FileOfLines = "/linesFile";
+            public const string Run2_MinLinesLength = "/minLinesLength";
+            public const string Run2_MaxLinesLength = "/maxLinesLength";
+            public const string Run2_LinesCount = "/linesCount";
+            public const string Run2_GenerateTimeout = "/lineTimeout";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
@@ -47,7 +52,11 @@ namespace MatrixScreenLoader
                     new string[] {ClearScreen, "true"},
                     new string[] {UpdateOnResize, "true"},
                     new string[] {Range, "2"},
-                    new string[] {Run, "0"}
+                    new string[] {Run, "0"},
+                    new string[] {Run2_FileOfLines, "none"},
+                    new string[] {Run2_MinLinesLength, "1"},
+                    new string[] {Run2_MaxLinesLength, "13"},
+                    new string[] {Run2_LinesCount, "2713"}
                 };
 
             public Setting()
@@ -183,6 +192,8 @@ namespace MatrixScreenLoader
 
         public class Run_2_Matrix
         {
+            public const char Filler = ' ';
+
             const int MaxWidth = 128;
             const int MaxHeight = 128;
 
@@ -190,7 +201,6 @@ namespace MatrixScreenLoader
             int width;
             int height;
             List<Run_2_Line> lines;
-
 
             public Run_2_Matrix(int width, int height)
             {
@@ -219,7 +229,7 @@ namespace MatrixScreenLoader
             {
                 get
                 {
-                    return CheckIndexes(index1, index2) ? ' ' : matrix[index1, index2];
+                    return CheckIndexes(index1, index2) ? Filler : matrix[index1, index2];
                 }
 
                 set
@@ -229,16 +239,44 @@ namespace MatrixScreenLoader
                 }
             }
 
+            public bool IsLineCross(Run_2_Line line)
+            {
+                bool output = false;
+                for (int i = 0; (i < lines.Count) && (!output); i++)
+                {
+                    output = output || line.IsCrossWith(lines[i]);
+                }
+                return output;
+            }
+
             public void AddNewLine(int column, int start, int length, string random_line)
             {
                 Run_2_Line line = new Run_2_Line(column, start, length, random_line);
+                this.AddNewLine(line);
+            }
+
+            public void AddNewLine(Run_2_Line line)
+            {
                 for (int i = 0, j = line.start; (j <= line.end); i++, j++)
                 {
-                    this[j, line.column] = this.random_line[i];
+                    this[j, line.column] = line.GetSymbol();
                 }
                 this.lines.Add(line);
             }
 
+            public void ShiftLines()
+            {
+                for (int i = 0; i < lines.Count; i++ )
+                {
+                    Run_2_Line line = lines[i];
+                    int index1 = line.start;
+                    int index2 = line.column;
+                    this[index1, index2] = Filler;
+                    index1 = line.end + 1;
+                    this[index1, index2] = line.GetSymbol();
+                    line.ShiftDown(1);
+                }
+            }
 
         }
 
@@ -272,14 +310,24 @@ namespace MatrixScreenLoader
             
             private bool CheckLinePosition()
             {
-                return this.random_line_position < random_line.Length;
+                return random_line_position < random_line.Length;
             }
 
             public char GetSymbol()
             {
                 if (!CheckLinePosition())
-                    random_line_position = 0;
-                return random_line[random_line_position++]; ///Not sure;
+                    this.random_line_position = 0;
+                return this.random_line[this.random_line_position++]; ///Not sure;
+            }
+        
+            private bool IsBelong(int digit, int diapason_start, int diapason_end)
+            {
+                return (digit >= diapason_start) && (digit <= diapason_end);
+            }
+
+            public bool IsCrossWith(Run_2_Line line)
+            {
+                return IsBelong(this.start, line.start, line.end) || IsBelong(this.end, line.start, line.end);
             }
 
         }
@@ -305,12 +353,25 @@ namespace MatrixScreenLoader
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int range = setting.GetInteger(Setting.Range, 2);
-            char[,] matrix = new char [128, 128]; ///(Don't ask me why);
-            ///(new Run_2_Line(5, 3, 7)).AddToMatrix(ref matrix, "Hell Welcomes You");
-            Run_2_Print(matrix, width, height);
+            string[] lines = new string[] { };
+            while (true)
+            {
+
+                if (isClearScreen)
+                    Console.Clear();
 
 
-            
+
+
+
+
+
+                if (isUpdateOnResize)
+                {
+                    width = Console.WindowWidth;
+                    height = Console.WindowHeight;
+                }
+            }
         }
 
     }
