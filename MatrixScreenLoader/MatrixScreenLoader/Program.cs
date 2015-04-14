@@ -134,7 +134,7 @@ namespace MatrixScreenLoader
                         matrix.Run = Run_2;
                         break;
                     default:
-                        matrix.Run = Run_1;
+                        matrix.Run = Run_2;
                         break;
                 }
             }
@@ -180,9 +180,71 @@ namespace MatrixScreenLoader
             }
         }
 
+
+        public class Run_2_Line
+        {
+            public int Column;
+            public int Start;
+            public int End;
+
+            public int Length
+            {
+                get { return End - Start + 1; }
+            }
+
+            public Run_2_Line(int column, int start, int length)
+            {
+                Column = column;
+                Start = start;
+                End = start + length - 1;
+            }
+        
+            public void ShiftDown(int shift_length)
+            {
+                Start -= shift_length;
+                End -= shift_length;
+            }
+
+            public void AddToMatrix(ref char[,] matrix, string random_line)
+            {
+                for (int i = 0, j = this.Start; (j <= this.End); i++, j++)
+                {
+                    if(true)
+                    {
+                        matrix[Column, i] = random_line[i];
+                    }
+                }
+            }
+        
+        }
+
+        private static void Run_2_Print(char[,] matrix, int width, int height)
+        {
+            string text = "";
+            for(int i = 0; i < width; i++)
+            {
+                for(int j=0; j < height; j++)
+                {
+                    text += matrix[i, j];
+                }
+            }
+            Console.WriteLine(text);
+        }
+
         private static void Run_2(Setting setting)
         {
+            int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
+            int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
+            int timeout = setting.GetInteger(Setting.Timeout, 100);
+            bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
+            bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
+            int range = setting.GetInteger(Setting.Range, 2);
+            char[,] matrix = new char [128, 128]; ///(Don't ask me why);
+            (new Run_2_Line(5, 3, 7)).AddToMatrix(ref matrix, "Hell Welcomes You");
+            Run_2_Print(matrix, width, height);
 
+
+            
         }
 
     }
