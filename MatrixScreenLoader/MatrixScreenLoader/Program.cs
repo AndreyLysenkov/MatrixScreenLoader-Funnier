@@ -181,40 +181,64 @@ namespace MatrixScreenLoader
             }
         }
 
+        public class Run_2_Matrix
+        {
+            const int MaxWidth = 128;
+            const int MaxHeight = 128;
+
+            char[,] matrix;
+            int width;
+            int height;
+            List<Run_2_Line> lines;
+
+            public Run_2_Matrix(int width, int height)
+            {
+                this.width = width;
+                this.height = height;
+                matrix = new char[MaxWidth, MaxHeight];
+                lines = new List<Run_2_Line> { };
+            }
+
+
+
+            public void AddNewLine(int column, int start, int length, string random_line)
+            {
+                Run_2_Line line = new Run_2_Line(column, start, length);
+                for (int i = 0, j = line.start; (j <= line.end); i++, j++)
+                {
+                    if (true)
+                    {
+                        matrix[j, line.column] = random_line[i];
+                    }
+                }
+                this.lines.Add(line);
+            }
+
+
+        }
 
         public class Run_2_Line
         {
-            public int Column;
-            public int Start;
-            public int End;
+            public int column;
+            public int start;
+            public int end;
 
             public int Length
             {
-                get { return End - Start + 1; }
+                get { return end - start + 1; }
             }
 
             public Run_2_Line(int column, int start, int length)
             {
-                Column = column;
-                Start = start;
-                End = start + length - 1;
+                this.column = column;
+                this.start = start;
+                this.end = start + length - 1;
             }
         
             public void ShiftDown(int shift_length)
             {
-                Start -= shift_length;
-                End -= shift_length;
-            }
-
-            public void AddToMatrix(ref char[,] matrix, string random_line)
-            {
-                for (int i = 0, j = this.Start; (j <= this.End); i++, j++)
-                {
-                    if(true)
-                    {
-                        matrix[j, Column] = random_line[i];
-                    }
-                }
+                start -= shift_length;
+                end -= shift_length;
             }
         
         }
@@ -241,7 +265,7 @@ namespace MatrixScreenLoader
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int range = setting.GetInteger(Setting.Range, 2);
             char[,] matrix = new char [128, 128]; ///(Don't ask me why);
-            (new Run_2_Line(5, 3, 7)).AddToMatrix(ref matrix, "Hell Welcomes You");
+            ///(new Run_2_Line(5, 3, 7)).AddToMatrix(ref matrix, "Hell Welcomes You");
             Run_2_Print(matrix, width, height);
 
 
