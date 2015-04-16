@@ -48,7 +48,7 @@ namespace MatrixScreenLoader
                 {
                     new string[] {Width, "smth"}, 
                     new string[] {Height, "smth"}, 
-                    new string[] {Timeout, "1000"},
+                    new string[] {Timeout, "50"},
                     new string[] {ClearScreen, "true"},
                     new string[] {UpdateOnResize, "true"},
                     new string[] {Range, "2"},
@@ -359,6 +359,16 @@ namespace MatrixScreenLoader
             Console.WriteLine(text);
         }
 
+        private static string GenerateRandomString(Random random, int length, int min, int max)
+        {
+            string output = "";
+            for (int i = 0; i < length; i++)
+            {
+                output += (char)random.Next(min, max);
+            }
+            return output;
+        }
+
         private static void Run_2(Setting setting)
         {
 
@@ -379,22 +389,19 @@ namespace MatrixScreenLoader
             Random random = new Random();
             int min = setting.GetInteger(Setting.Run2_MinLinesLength, 1);
             int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
-                string str = "Test subject";
-                Run_2_Line line = new Run_2_Line(1, 1, 5, str);
-                matrix.AddNewLine(line);
             for (int linesCounter = 0; true; linesCounter++)
             {
 
-                //if ((linesCounter % generateTimeout == 0) && (linesAmount > 0))
-                //{
-                //    string str = "Test subject";
-                //    ///Run_2_Line line = new Run_2_Line(2, 1, 5, str);
-                //    Run_2_Line line = new Run_2_Line(1, 1, 5, str);
-                //    matrix.AddNewLine(line);
-                //    ///Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
-                //    linesAmount--;
-                //    ///Console.WriteLine("Line created");
-                //}
+                if ((linesCounter % generateTimeout == 0) && (linesAmount > 0))
+                {
+                    string str = "Test subject";
+                    ///Run_2_Line line = new Run_2_Line(2, 1, 5, str);
+                    Run_2_Line line = new Run_2_Line(random.Next(min, max), GenerateRandomString(random, random.Next(min, max), 128+1024, 150+1024));
+                    matrix.AddNewLine(line);
+                    ///Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
+                    linesAmount--;
+                    ///Console.WriteLine("Line created");
+                }
 
                 matrix.ShiftLines();
 
