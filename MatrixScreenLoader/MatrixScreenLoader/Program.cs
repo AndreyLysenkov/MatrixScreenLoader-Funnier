@@ -59,9 +59,9 @@ namespace MatrixScreenLoader
                     new string[] {Run2_MinLinesLength, "1"},
                     new string[] {Run2_MaxLinesLength, "13"},
                     new string[] {Run2_LinesCount, "2713"},
-                    new string[] {Run2_GenerateTimeout, "1"},
-                    new string[] {Run2_LinesCharMin, "1024"},
-                    new string[] {Run2_LinesCharMax, "2714"}
+                    new string[] {Run2_GenerateTimeout, "default"},
+                    new string[] {Run2_LinesCharMin, "none"},
+                    new string[] {Run2_LinesCharMax, "none"}
                 };
 
             public Setting()
@@ -381,15 +381,14 @@ namespace MatrixScreenLoader
             int timeout = setting.GetInteger(Setting.Timeout, 50);
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
-            int range = setting.GetInteger(Setting.Range, 2);
             int linesAmount = setting.GetInteger(Setting.Run2_LinesCount, 2713);
-            int generateTimeout = setting.GetInteger(Setting.Run2_GenerateTimeout, 1);
+            int generateTimeout = setting.GetInteger(Setting.Run2_GenerateTimeout, -13);
             Run_2_Matrix matrix = new Run_2_Matrix(width, height);
             Random random = new Random();
             int min = setting.GetInteger(Setting.Run2_MinLinesLength, 1);
             int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
-            int charMin = setting.GetInteger(Setting.Run2_LinesCharMin, 13);
-            int charMax = setting.GetInteger(Setting.Run2_LinesCharMax, 13);
+            int charMin = setting.GetInteger(Setting.Run2_LinesCharMin, 1024*1024 + 48);
+            int charMax = setting.GetInteger(Setting.Run2_LinesCharMax, 1024*1024 + 50);
             for (int linesCounter = 0; true; linesCounter++)
             {
 
@@ -399,14 +398,14 @@ namespace MatrixScreenLoader
                     height = Console.WindowHeight;
                 }
 
-                if ((linesCounter % generateTimeout == 0) && (linesAmount > 0))
+                if ((generateTimeout < 0) || ((linesCounter % generateTimeout == 0) && (linesAmount > 0)))
                 {
-                    ///Run_2_Line line = new Run_2_Line(2, 1, 5, str);
-                    Run_2_Line line = new Run_2_Line(random.Next(0, width), GenerateRandomString(random, random.Next(min, max), charMin, charMax));
-                    matrix.AddNewLine(line);
-                    ///Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
-                    linesAmount--;
-                    ///Console.WriteLine("Line created");
+                    for (int i = 0; i < ((generateTimeout < 0) ? -generateTimeout : 1); i++)
+                    {
+                        Run_2_Line line = new Run_2_Line(random.Next(0, width), GenerateRandomString(random, random.Next(min, max), charMin, charMax));
+                        matrix.AddNewLine(line);
+                        linesAmount--;
+                    }
                 }
 
                 matrix.ShiftLines();
