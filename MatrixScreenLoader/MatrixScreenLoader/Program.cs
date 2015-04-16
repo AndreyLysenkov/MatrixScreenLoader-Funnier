@@ -50,18 +50,18 @@ namespace MatrixScreenLoader
                 {
                     new string[] {Width, "smth"}, 
                     new string[] {Height, "smth"}, 
-                    new string[] {Timeout, "50"},
+                    new string[] {Timeout, "default"},
                     new string[] {ClearScreen, "true"},
                     new string[] {UpdateOnResize, "true"},
                     new string[] {Range, "2"},
                     new string[] {Run, "0"},
                     new string[] {Run2_FileOfLines, "none"},
-                    new string[] {Run2_MinLinesLength, "1"},
-                    new string[] {Run2_MaxLinesLength, "13"},
-                    new string[] {Run2_LinesCount, "2713"},
+                    new string[] {Run2_MinLinesLength, "default"},
+                    new string[] {Run2_MaxLinesLength, "default"},
+                    new string[] {Run2_LinesCount, "defalt"},
                     new string[] {Run2_GenerateTimeout, "default"},
-                    new string[] {Run2_LinesCharMin, "none"},
-                    new string[] {Run2_LinesCharMax, "none"}
+                    new string[] {Run2_LinesCharMin, "default"},
+                    new string[] {Run2_LinesCharMax, "default"}
                 };
 
             public Setting()
@@ -199,7 +199,7 @@ namespace MatrixScreenLoader
         {
             public const char Filler = ' ';
 
-            const int MaxWidth = 128;
+            const int MaxWidth = 256;
             const int MaxHeight = 128;
 
             char[,] matrix;
@@ -211,9 +211,9 @@ namespace MatrixScreenLoader
             {
                 this.width = width;
                 this.height = height;
-                matrix = new char[MaxWidth, MaxHeight];
-                for (int i = 0; i < MaxWidth; i++)
-                    for (int j = 0; j < MaxHeight; j++)
+                matrix = new char[MaxHeight, MaxWidth];
+                for (int i = 0; i < MaxHeight; i++)
+                    for (int j = 0; j < MaxWidth; j++)
                         matrix[i, j] = Filler;
                 lines = new List<Run_2_Line> { };
             }
@@ -382,7 +382,7 @@ namespace MatrixScreenLoader
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int linesAmount = setting.GetInteger(Setting.Run2_LinesCount, 2713);
-            int generateTimeout = setting.GetInteger(Setting.Run2_GenerateTimeout, -13);
+            int generateTimeout = setting.GetInteger(Setting.Run2_GenerateTimeout, -7);
             Run_2_Matrix matrix = new Run_2_Matrix(width, height);
             Random random = new Random();
             int min = setting.GetInteger(Setting.Run2_MinLinesLength, 1);
@@ -416,7 +416,7 @@ namespace MatrixScreenLoader
 
 
 
-                ///System.Threading.Thread.Sleep(timeout);
+                System.Threading.Thread.Sleep(timeout);
             }
         }
 
