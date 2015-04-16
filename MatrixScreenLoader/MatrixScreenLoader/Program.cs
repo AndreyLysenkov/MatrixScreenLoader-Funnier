@@ -38,6 +38,8 @@ namespace MatrixScreenLoader
             public const string Run2_MaxLinesLength = "/maxLinesLength";
             public const string Run2_LinesCount = "/linesCount";
             public const string Run2_GenerateTimeout = "/lineTimeout";
+            public const string Run2_LinesCharMin = "/linesCharCodeMin";
+            public const string Run2_LinesCharMax = "/linesCharCodeMax";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
@@ -57,7 +59,9 @@ namespace MatrixScreenLoader
                     new string[] {Run2_MinLinesLength, "1"},
                     new string[] {Run2_MaxLinesLength, "13"},
                     new string[] {Run2_LinesCount, "2713"},
-                    new string[] {Run2_GenerateTimeout, "1"}
+                    new string[] {Run2_GenerateTimeout, "1"},
+                    new string[] {Run2_LinesCharMin, "1024"},
+                    new string[] {Run2_LinesCharMax, "2714"}
                 };
 
             public Setting()
@@ -372,11 +376,9 @@ namespace MatrixScreenLoader
         {
 
             //public const string Run2_FileOfLines = "/linesFile";
-            //public const string Run2_MinLinesLength = "/minLinesLength";
-            //public const string Run2_MaxLinesLength = "/maxLinesLength";
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
-            int timeout = setting.GetInteger(Setting.Timeout, 500);
+            int timeout = setting.GetInteger(Setting.Timeout, 50);
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int range = setting.GetInteger(Setting.Range, 2);
@@ -386,14 +388,21 @@ namespace MatrixScreenLoader
             Random random = new Random();
             int min = setting.GetInteger(Setting.Run2_MinLinesLength, 1);
             int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
+            int charMin = setting.GetInteger(Setting.Run2_LinesCharMin, 13);
+            int charMax = setting.GetInteger(Setting.Run2_LinesCharMax, 13);
             for (int linesCounter = 0; true; linesCounter++)
             {
 
+                if (isUpdateOnResize)
+                {
+                    width = Console.WindowWidth;
+                    height = Console.WindowHeight;
+                }
+
                 if ((linesCounter % generateTimeout == 0) && (linesAmount > 0))
                 {
-                    string str = "Test subject";
                     ///Run_2_Line line = new Run_2_Line(2, 1, 5, str);
-                    Run_2_Line line = new Run_2_Line(random.Next(min, max), GenerateRandomString(random, random.Next(min, max), 128+1024*128, 150+1024*128));
+                    Run_2_Line line = new Run_2_Line(random.Next(0, width), GenerateRandomString(random, random.Next(min, max), charMin, charMax));
                     matrix.AddNewLine(line);
                     ///Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
                     linesAmount--;
@@ -404,16 +413,11 @@ namespace MatrixScreenLoader
 
                 if (isClearScreen)
                     Console.Clear();
-
                 Run_2_Print(matrix, width, height);
 
-                if (isUpdateOnResize)
-                {
-                    width = Console.WindowWidth;
-                    height = Console.WindowHeight;
-                }
 
-                System.Threading.Thread.Sleep(timeout);
+
+                ///System.Threading.Thread.Sleep(timeout);
             }
         }
 
