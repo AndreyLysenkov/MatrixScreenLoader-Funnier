@@ -277,7 +277,6 @@ namespace MatrixScreenLoader
                     int index2 = line.column;
                     this[index1, index2] = Filler;
                     index1 = line.end + 1;
-                    Console.WriteLine(line.start);
                     this[index1, index2] = line.GetSymbol();
                     line.ShiftDown(1);
                 }
@@ -375,8 +374,6 @@ namespace MatrixScreenLoader
             //public const string Run2_FileOfLines = "/linesFile";
             //public const string Run2_MinLinesLength = "/minLinesLength";
             //public const string Run2_MaxLinesLength = "/maxLinesLength";
-            //public const string Run2_LinesCount = "/linesCount";
-            //public const string Run2_GenerateTimeout = "/lineTimeout";
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
             int timeout = setting.GetInteger(Setting.Timeout, 500);
@@ -396,7 +393,7 @@ namespace MatrixScreenLoader
                 {
                     string str = "Test subject";
                     ///Run_2_Line line = new Run_2_Line(2, 1, 5, str);
-                    Run_2_Line line = new Run_2_Line(random.Next(min, max), GenerateRandomString(random, random.Next(min, max), 128+1024, 150+1024));
+                    Run_2_Line line = new Run_2_Line(random.Next(min, max), GenerateRandomString(random, random.Next(min, max), 128+1024*128, 150+1024*128));
                     matrix.AddNewLine(line);
                     ///Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
                     linesAmount--;
@@ -405,18 +402,16 @@ namespace MatrixScreenLoader
 
                 matrix.ShiftLines();
 
-                Console.WriteLine("Hi");
-
-                //if (isClearScreen)
-                    //Console.Clear();
+                if (isClearScreen)
+                    Console.Clear();
 
                 Run_2_Print(matrix, width, height);
 
-                //if (isUpdateOnResize)
-                //{
-                //    width = Console.WindowWidth;
-                //    height = Console.WindowHeight;
-                //}
+                if (isUpdateOnResize)
+                {
+                    width = Console.WindowWidth;
+                    height = Console.WindowHeight;
+                }
 
                 System.Threading.Thread.Sleep(timeout);
             }
