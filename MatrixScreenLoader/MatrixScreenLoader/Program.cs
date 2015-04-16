@@ -48,7 +48,7 @@ namespace MatrixScreenLoader
                 {
                     new string[] {Width, "smth"}, 
                     new string[] {Height, "smth"}, 
-                    new string[] {Timeout, "50"},
+                    new string[] {Timeout, "1000"},
                     new string[] {ClearScreen, "true"},
                     new string[] {UpdateOnResize, "true"},
                     new string[] {Range, "2"},
@@ -56,7 +56,8 @@ namespace MatrixScreenLoader
                     new string[] {Run2_FileOfLines, "none"},
                     new string[] {Run2_MinLinesLength, "1"},
                     new string[] {Run2_MaxLinesLength, "13"},
-                    new string[] {Run2_LinesCount, "2713"}
+                    new string[] {Run2_LinesCount, "2713"},
+                    new string[] {Run2_GenerateTimeout, "1"}
                 };
 
             public Setting()
@@ -207,6 +208,9 @@ namespace MatrixScreenLoader
                 this.width = width;
                 this.height = height;
                 matrix = new char[MaxWidth, MaxHeight];
+                for (int i = 0; i < MaxWidth; i++)
+                    for (int j = 0; j < MaxHeight; j++)
+                        matrix[i, j] = Filler;
                 lines = new List<Run_2_Line> { };
             }
 
@@ -302,6 +306,15 @@ namespace MatrixScreenLoader
                 this.random_line_position = 0;
             }
 
+            public Run_2_Line(int column, string random_line)
+            {
+                this.column = column;
+                this.start = -random_line.Length;
+                this.end = 0;
+                this.random_line = random_line;
+                this.random_line_position = 0;
+            }
+
             public void ShiftDown(int shift_length)
             {
                 start -= shift_length;
@@ -332,7 +345,7 @@ namespace MatrixScreenLoader
 
         }
 
-        private static void Run_2_Print(char[,] matrix, int width, int height)
+        private static void Run_2_Print(Run_2_Matrix matrix, int width, int height)
         {
             string text = "";
             for (int i = 0; i < height; i++)
@@ -355,36 +368,45 @@ namespace MatrixScreenLoader
             //public const string Run2_GenerateTimeout = "/lineTimeout";
             int width = setting.GetInteger(Setting.Width, Console.WindowWidth);
             int height = setting.GetInteger(Setting.Height, Console.WindowHeight);
-            int timeout = setting.GetInteger(Setting.Timeout, 100);
+            int timeout = setting.GetInteger(Setting.Timeout, 500);
             bool isClearScreen = setting.GetBoolean(Setting.ClearScreen, true);
             bool isUpdateOnResize = setting.GetBoolean(Setting.UpdateOnResize, true);
             int range = setting.GetInteger(Setting.Range, 2);
-            string[] lines = new string[] { };
-            ///Forming a lines array;
-            int linesCount = setting.GetInteger(Setting.Run2_LinesCount, 2713);
-            
-            for (int i = 0; i < linesCount; i++)
+            int linesAmount = setting.GetInteger(Setting.Run2_LinesCount, 2713);
+            int generateTimeout = setting.GetInteger(Setting.Run2_GenerateTimeout, 1);
+            Run_2_Matrix matrix = new Run_2_Matrix(width, height);
+            Random random = new Random();
+            int min = setting.GetInteger(Setting.Run2_MinLinesLength, 1);
+            int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
+            for (int linesCounter = 0; true; linesCounter++)
             {
 
-            }
+                if ((linesCounter % generateTimeout == 0) && (linesAmount > 0))
+                {
+                    string str = "Test subject";
+                    Run_2_Line line = new Run_2_Line(2, 1, 5, str);
+                    matrix.AddNewLine(line);
+                    Console.WriteLine("Line {0} {1} {2}", line.column, line.start, line.end);
+                    linesAmount--;
+                    Console.WriteLine("Line created");
+                }
 
-            for (int linesCounter = 0; true; linesCounter = (linesCounter < lines.Length) ? linesCounter + 1 : 0)
-            {
+                matrix.ShiftLines();
 
-                if (isClearScreen)
-                    Console.Clear();
+                Console.WriteLine("Hi");
 
+                //if (isClearScreen)
+                //    Console.Clear();
 
-
-
-
-
+                Run_2_Print(matrix, width, height);
 
                 if (isUpdateOnResize)
                 {
                     width = Console.WindowWidth;
                     height = Console.WindowHeight;
                 }
+
+                System.Threading.Thread.Sleep(timeout);
             }
         }
 
