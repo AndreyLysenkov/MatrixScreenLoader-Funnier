@@ -397,7 +397,7 @@ namespace MatrixScreenLoader
             int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
             int charMin = setting.GetInteger(Setting.Run2_LinesCharMin, 1024*1024 + 48);
             int charMax = setting.GetInteger(Setting.Run2_LinesCharMax, 1024*1024 + 50);
-            int maxSpeed = setting.GetInteger(Setting.Run2_LineSpeed, 13);
+            int maxSpeed = setting.GetInteger(Setting.Run2_LineSpeed, 10);
             for (int linesCounter = 0; true; linesCounter++)
             {
 
