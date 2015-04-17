@@ -16,3 +16,4 @@ Key commands:
 	/maxLinesLength [integer number] *'/run=2'* - set maximal length of lines - "13" on default;
 	/linesCount [integer number] *'/run=2'* - set maximal amount of lines - "2713" on default;
 	/lineTimeout [integer number] *'/run=2'* - if positive indicate in that number of iteration add line; if negative, indicate how many lines generate per iteration - "-13" on default;
+	/lineSpeed [integer number] *'/run=2'* - set maximal line speed - "13" on default;
