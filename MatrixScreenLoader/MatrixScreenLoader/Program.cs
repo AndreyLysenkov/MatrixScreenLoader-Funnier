@@ -40,6 +40,7 @@ namespace MatrixScreenLoader
             public const string Run2_GenerateTimeout = "/lineTimeout";
             public const string Run2_LinesCharMin = "/linesCharCodeMin";
             public const string Run2_LinesCharMax = "/linesCharCodeMax";
+            public const string Run2_LineSpeed = "/linesSpeed";
 
             /// Yeah, I could use [,] instead of [][], but...
             /// I had some reasons about that weird form...
@@ -61,7 +62,8 @@ namespace MatrixScreenLoader
                     new string[] {Run2_LinesCount, "defalt"},
                     new string[] {Run2_GenerateTimeout, "default"},
                     new string[] {Run2_LinesCharMin, "default"},
-                    new string[] {Run2_LinesCharMax, "default"}
+                    new string[] {Run2_LinesCharMax, "default"},
+                    new string[] {Run2_LineSpeed, "default"}
                 };
 
             public Setting()
@@ -257,11 +259,11 @@ namespace MatrixScreenLoader
                 return output;
             }
 
-            public void AddNewLine(int column, int start, int length, string random_line)
-            {
-                Run_2_Line line = new Run_2_Line(column, start, length, random_line);
-                this.AddNewLine(line);
-            }
+            //public void AddNewLine(int column, int start, int length, string random_line)
+            //{
+            //    Run_2_Line line = new Run_2_Line(column, start, length, random_line);
+            //    this.AddNewLine(line);
+            //}
 
             public void AddNewLine(Run_2_Line line)
             {
@@ -279,10 +281,13 @@ namespace MatrixScreenLoader
                     Run_2_Line line = lines[i];
                     int index1 = line.start;
                     int index2 = line.column;
-                    this[index1, index2] = Filler;
-                    index1 = line.end + 1;
-                    this[index1, index2] = line.GetSymbol();
-                    line.ShiftDown(1);
+                    int index1_2 = line.end + 1;
+                    for (int j = 0; j < line.speed; j++, index1++, index1_2++)
+                    {
+                        this[index1, index2] = Filler;
+                        this[index1_2, index2] = line.GetSymbol();
+                    }
+                    line.ShiftDown();
                 }
             }
 
@@ -295,34 +300,37 @@ namespace MatrixScreenLoader
             public int end;
             public string random_line;
             public int random_line_position;
+            public int speed;
 
             public int Length
             {
                 get { return end - start + 1; }
             }
 
-            public Run_2_Line(int column, int start, int length, string random_line)
+            public Run_2_Line(int column, int start, int length, string random_line, int speed)
             {
                 this.column = column;
                 this.start = start;
                 this.end = start + length - 1;
                 this.random_line = random_line;
                 this.random_line_position = 0;
+                this.speed = speed;
             }
 
-            public Run_2_Line(int column, string random_line)
+            public Run_2_Line(int column, string random_line, int speed)
             {
                 this.column = column;
                 this.start = -random_line.Length;
                 this.end = 0;
                 this.random_line = random_line;
                 this.random_line_position = 0;
+                this.speed = speed;
             }
 
-            public void ShiftDown(int shift_length)
+            public void ShiftDown()
             {
-                start += shift_length;
-                end += shift_length;
+                start += speed;
+                end += speed;
             }
 
             private bool CheckLinePosition()
@@ -389,6 +397,7 @@ namespace MatrixScreenLoader
             int max = setting.GetInteger(Setting.Run2_MaxLinesLength, 13);
             int charMin = setting.GetInteger(Setting.Run2_LinesCharMin, 1024*1024 + 48);
             int charMax = setting.GetInteger(Setting.Run2_LinesCharMax, 1024*1024 + 50);
+            int maxSpeed = setting.GetInteger(Setting.Run2_LineSpeed, 13);
             for (int linesCounter = 0; true; linesCounter++)
             {
 
@@ -402,7 +411,7 @@ namespace MatrixScreenLoader
                 {
                     for (int i = 0; i < ((generateTimeout < 0) ? -generateTimeout : 1); i++)
                     {
-                        Run_2_Line line = new Run_2_Line(random.Next(0, width), GenerateRandomString(random, random.Next(min, max), charMin, charMax));
+                        Run_2_Line line = new Run_2_Line(random.Next(0, width), GenerateRandomString(random, random.Next(min, max), charMin, charMax), random.Next(1, maxSpeed));
                         matrix.AddNewLine(line);
                         linesAmount--;
                     }
